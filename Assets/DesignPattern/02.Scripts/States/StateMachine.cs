@@ -1,30 +1,30 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class StateMachine
 {
-    public enum StateName { Idle, Move, Attack }
     public IState CurrentState { get; private set; }
-    public Dictionary<StateName, IState> states = new Dictionary<StateName, IState>();
+    public Dictionary<Define.StateName, IState> States { get; private set; }  = new Dictionary<Define.StateName, IState>();
 
     public StateMachine()
     {
-        states.Add(StateName.Idle, new IdleState());
-        states.Add(StateName.Move, new MoveState());
-        states.Add(StateName.Attack, new AttackState());
+        States.Add(Define.StateName.Idle, new IdleState());
+        States.Add(Define.StateName.Move, new MoveState());
+        States.Add(Define.StateName.Attack, new AttackState());
     }
     
     // 초기화
     public void InitState()
     {
-        CurrentState = states[StateName.Idle];
+        CurrentState = States[Define.StateName.Idle];
         CurrentState?.EnterState();
     }
 
     // 상태 전환
-    public void ChangeState(StateName nextState)
+    public void ChangeState(Define.StateName nextState)
     {
-        if (states.TryGetValue(nextState, out IState newState) == false)
+        if (States.TryGetValue(nextState, out IState newState) == false)
             return;
         
         if (CurrentState == newState)

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class IdleState : IState
@@ -10,7 +11,7 @@ public class IdleState : IState
         player.Character.Move(Vector3.zero);
         
         // 애니메이션
-        player.Anim.CrossFade("IDLE", 0.1f);
+        WeaponAnimation(player.Weapon.CurrentWeapon);
     }
 
     public void UpdateState()
@@ -21,5 +22,11 @@ public class IdleState : IState
     public void ExitState()
     {
         
+    }
+
+    public void WeaponAnimation(Weapon weapon)
+    {
+        string wpName = weapon.GetType().Name;
+        player.Anim.CrossFade($"{wpName}Idle", 0.1f);
     }
 }

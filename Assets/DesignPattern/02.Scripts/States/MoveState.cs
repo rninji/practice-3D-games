@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -17,7 +18,7 @@ public class MoveState : IState
         
         if (player.Agent.remainingDistance < player.Agent.stoppingDistance)
         {
-            player.State.ChangeState(StateMachine.StateName.Idle); // 정지
+            player.State.ChangeState(Define.StateName.Idle); // 정지
         }
     }
 

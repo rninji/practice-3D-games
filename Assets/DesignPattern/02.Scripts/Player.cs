@@ -12,9 +12,12 @@ public class Player : MonoBehaviour
 
     public static Player Instance { get { return instance; } }
     public StateMachine State { get; private set; }
+    public WeaponManager Weapon { get; private set; }
     public Animator Anim { get; private set; }
     public CharacterController Character { get; private set; }
     public NavMeshAgent Agent { get; private set; }
+
+    public Transform gripPoint;
 
     private void Awake()
     {
@@ -22,6 +25,7 @@ public class Player : MonoBehaviour
         {
             instance = this;
             State = new StateMachine();
+            Weapon = new WeaponManager();
             Anim = gameObject.GetComponent<Animator>();
             Character = gameObject.GetComponent<CharacterController>();
             Agent = gameObject.GetComponent<NavMeshAgent>();
@@ -36,6 +40,7 @@ public class Player : MonoBehaviour
     
     private void Start()
     {
+        Weapon?.InitWeapon();
         State?.InitState();
     }
 
@@ -50,11 +55,17 @@ public class Player : MonoBehaviour
         // Keyboard Input
         if (Input.GetKeyDown(KeyCode.LeftControl))
             OnKeyboardEvent(KeyCode.LeftControl);
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+            OnKeyboardEvent(KeyCode.Alpha1);
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+            OnKeyboardEvent(KeyCode.Alpha2);
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+            OnKeyboardEvent(KeyCode.Alpha3);
     }
 
    public void OnMouseEvent()
     {
-        if (State.CurrentState == State.states[StateMachine.StateName.Attack])
+        if (State.CurrentState == State.States[Define.StateName.Attack])
             return;
         
         RaycastHit hit;
@@ -64,7 +75,7 @@ public class Player : MonoBehaviour
         if (raycastHit)
         {
             Agent.SetDestination(hit.point);
-            State.ChangeState(StateMachine.StateName.Move);
+            State.ChangeState(Define.StateName.Move);
         }
     }
 
@@ -73,11 +84,20 @@ public class Player : MonoBehaviour
         // 공격
         if (key == KeyCode.LeftControl)
         {
-            if (State.CurrentState == State.states[StateMachine.StateName.Attack])
+            if (State.CurrentState == State.States[Define.StateName.Attack])
                 return;
-            State.ChangeState(StateMachine.StateName.Attack);
+            State.ChangeState(Define.StateName.Attack);
         }
+        
+        if (State.CurrentState == State.States[Define.StateName.Attack])
+            return;
+        
+        // 무기 교체
+        if (key == KeyCode.Alpha1)
+            Weapon.ChangeWeapon(Define.WeaponName.Sword);
+        else if (key == KeyCode.Alpha2)
+            Weapon.ChangeWeapon(Define.WeaponName.Polearm);
+        else if (key == KeyCode.Alpha3)
+            Weapon.ChangeWeapon(Define.WeaponName.TwoHander);
     }
-    
-    
 }
