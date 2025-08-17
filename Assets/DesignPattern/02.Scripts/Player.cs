@@ -17,7 +17,8 @@ public class Player : MonoBehaviour
     public CharacterController Character { get; private set; }
     public NavMeshAgent Agent { get; private set; }
 
-    public Transform gripPoint;
+    public Transform rightGripPoint;
+    public Transform leftGripPoint;
 
     private void Awake()
     {
@@ -47,57 +48,6 @@ public class Player : MonoBehaviour
     void Update()
     {
         State?.UpdateState();
-        
-        // Mouse Input
-        if (Input.GetMouseButton(0))
-            OnMouseEvent();
-        
-        // Keyboard Input
-        if (Input.GetKeyDown(KeyCode.LeftControl))
-            OnKeyboardEvent(KeyCode.LeftControl);
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-            OnKeyboardEvent(KeyCode.Alpha1);
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-            OnKeyboardEvent(KeyCode.Alpha2);
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-            OnKeyboardEvent(KeyCode.Alpha3);
     }
-
-   public void OnMouseEvent()
-    {
-        if (State.CurrentState == State.States[Define.StateName.Attack])
-            return;
-        
-        RaycastHit hit;
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        bool raycastHit = Physics.Raycast(ray, out hit, 100.0f, LayerMask.GetMask("Ground"));
-
-        if (raycastHit)
-        {
-            Agent.SetDestination(hit.point);
-            State.ChangeState(Define.StateName.Move);
-        }
-    }
-
-    public void OnKeyboardEvent(KeyCode key)
-    {
-        // 공격
-        if (key == KeyCode.LeftControl)
-        {
-            if (State.CurrentState == State.States[Define.StateName.Attack])
-                return;
-            State.ChangeState(Define.StateName.Attack);
-        }
-        
-        if (State.CurrentState == State.States[Define.StateName.Attack])
-            return;
-        
-        // 무기 교체
-        if (key == KeyCode.Alpha1)
-            Weapon.ChangeWeapon(Define.WeaponName.Sword);
-        else if (key == KeyCode.Alpha2)
-            Weapon.ChangeWeapon(Define.WeaponName.Polearm);
-        else if (key == KeyCode.Alpha3)
-            Weapon.ChangeWeapon(Define.WeaponName.TwoHander);
-    }
+   
 }
