@@ -52,6 +52,8 @@ public class WeaponManager
 
         RemoveWeapon();
         SetWeapon(newWeapon);
+        
+        UIManager.Instance.ChangeIcon(nextWeapon);
 
         IState currState = Player.Instance.State.CurrentState;
         if (currState == Player.Instance.State.States[Define.StateName.Idle])
@@ -63,7 +65,7 @@ public class WeaponManager
 
     public void Attack()
     {
-        CurrentWeapon?.Attack();
+        Player.Instance.StartCoroutine(CurrentWeapon?.Attack());
     }
 
     public void SubAttack()
@@ -71,7 +73,11 @@ public class WeaponManager
         if (CurrentWeapon is ISubAttackable)
         {
             ISubAttackable sWeapon = (ISubAttackable)CurrentWeapon;
-            sWeapon?.SubAttack();
+            Player.Instance.StartCoroutine(sWeapon?.SubAttack());
+        }
+        else
+        {
+            Player.Instance.State.ChangeState(Define.StateName.Idle); // Idle로 전환
         }
     }
 }

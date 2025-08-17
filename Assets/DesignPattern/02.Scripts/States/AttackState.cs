@@ -24,8 +24,6 @@ public class AttackState : IState
                 SubAttack();
                 break;
         }
-        
-        player.State.ChangeState(Define.StateName.Idle); // Idle로 전환
     }
 
     public void SetAttackType(AttackType attackType)

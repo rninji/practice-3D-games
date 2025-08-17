@@ -6,21 +6,16 @@ using Object = UnityEngine.Object;
 public class Sword: Weapon, ISubAttackable
 {
     Player player = Player.Instance;
-
     private float coolTime = 1.2f;
     private float subCoolTime = 0.5f;
+    
     protected override void Init()
     {
         base.Init();
         CreateSubWeapon("Shield");
     }
-
-    public override void Attack()
-    {
-        player.StartCoroutine(AttackRoutine());
-    }
     
-    IEnumerator AttackRoutine()
+    protected override IEnumerator AttackRoutine()
     {
         player.Anim.CrossFade("SwordAttack", 0.1f); 
         UIManager.Instance.StartCoolTime(coolTime);
@@ -31,9 +26,10 @@ public class Sword: Weapon, ISubAttackable
         yield return new WaitForSeconds(animDuration - 0.1f); // 애니메이션 시간만큼 대기
     }
 
-    public void SubAttack()
+    public IEnumerator SubAttack()
     {
-        player.StartCoroutine(SubAttackRoutine());
+        yield return player.StartCoroutine(SubAttackRoutine());
+        Player.Instance.State.ChangeState(Define.StateName.Idle); // Idle로 전환
     }
     
     IEnumerator SubAttackRoutine()

@@ -1,6 +1,7 @@
+using System.Collections;
 using UnityEngine;
 
 public interface ISubAttackable
 {
-    void SubAttack();
+    public IEnumerator SubAttack();
 }

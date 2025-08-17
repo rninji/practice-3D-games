@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -7,7 +8,7 @@ using Object = UnityEngine.Object;
 public abstract class Weapon : MonoBehaviour
 {
     List<GameObject> objects;
-    public abstract void Attack();
+
 
     private void Awake()
     {
@@ -19,6 +20,7 @@ public abstract class Weapon : MonoBehaviour
         objects = new List<GameObject>();
         objects.Add(gameObject);
     }
+    
     protected void CreateSubWeapon(string name, bool isLeft = true)
     {
         GameObject prefab = Resources.Load<GameObject>($"Prefabs/{name}");
@@ -37,4 +39,12 @@ public abstract class Weapon : MonoBehaviour
             obj.SetActive(isActive);
         }
     }
+    
+    public virtual IEnumerator Attack()
+    {
+        yield return Player.Instance.StartCoroutine(AttackRoutine());
+        Player.Instance.State.ChangeState(Define.StateName.Idle); // Idle로 전환
+    }
+    
+    protected abstract IEnumerator AttackRoutine();
 }

@@ -4,14 +4,9 @@ using UnityEngine;
 public class TwoHander:  Weapon
 {
     Player player = Player.Instance;
-
-    public override void Attack()
-    {
-        player.StartCoroutine(AttackRoutine());
-    }
     private float coolTime = 1.2f;
     
-    IEnumerator AttackRoutine()
+    protected override IEnumerator AttackRoutine()
     {
         player.Anim.CrossFade("TwoHanderAttack", 0.1f); 
         UIManager.Instance.StartCoolTime(coolTime);
