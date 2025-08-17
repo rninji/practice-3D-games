@@ -24,7 +24,7 @@ public class WeaponManager
     public Weapon CreateWeapon(Define.WeaponName weapon)
     {
         GameObject obj = Resources.Load<GameObject>($"Prefabs/{Enum.GetName(typeof(Define.WeaponName), weapon)}");
-        GameObject weaponObj = Object.Instantiate(obj, Player.Instance.gripPoint);
+        GameObject weaponObj = Object.Instantiate(obj, Player.Instance.rightGripPoint);
         weaponObj.SetActive(false);
         return weaponObj.GetComponent<Weapon>();
     }
@@ -34,14 +34,14 @@ public class WeaponManager
         if (newWeapon == CurrentWeapon) return;
 
         CurrentWeapon = newWeapon;
-        CurrentWeapon.gameObject.SetActive(true);
+        CurrentWeapon.ActiveWeapons(true);
     }
 
     public void RemoveWeapon()
     {
         if (CurrentWeapon == null) return;
 
-        CurrentWeapon.gameObject.SetActive(false);
+        CurrentWeapon.ActiveWeapons(false);
         CurrentWeapon = null;
     }
 
@@ -64,5 +64,14 @@ public class WeaponManager
     public void Attack()
     {
         CurrentWeapon?.Attack();
+    }
+
+    public void SubAttack()
+    {
+        if (CurrentWeapon is ISubAttackable)
+        {
+            ISubAttackable sWeapon = (ISubAttackable)CurrentWeapon;
+            sWeapon?.SubAttack();
+        }
     }
 }

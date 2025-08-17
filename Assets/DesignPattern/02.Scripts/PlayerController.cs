@@ -18,6 +18,16 @@ public class PlayerController : MonoBehaviour
         player.State.ChangeState(Define.StateName.Attack);
     }
 
+    void OnSubAttack()
+    {
+        if (player.State.CurrentState == player.State.States[Define.StateName.Attack])
+            return;
+        
+        // 공격 타입 변경
+        (player.State.States[Define.StateName.Attack] as AttackState)?.SetAttackType(AttackType.Sub);
+        player.State.ChangeState(Define.StateName.Attack);
+    }
+    
     public void OnMove()
     {
         if (player.State.CurrentState == player.State.States[Define.StateName.Attack])

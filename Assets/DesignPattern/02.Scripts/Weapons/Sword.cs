@@ -1,10 +1,18 @@
+using System;
 using System.Collections;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
-public class Sword: Weapon
+public class Sword: Weapon, ISubAttackable
 {
     Player player = Player.Instance;
-    
+
+    protected override void Init()
+    {
+        base.Init();
+        CreateSubWeapon("Shield");
+    }
+
     public override void Attack()
     {
         player.StartCoroutine(AttackRoutine());
@@ -18,7 +26,20 @@ public class Sword: Weapon
         
         float animDuration = player.Anim.GetCurrentAnimatorClipInfo(0).Length;
         yield return new WaitForSeconds(animDuration - 0.1f); // 애니메이션 시간만큼 대기
+    }
+
+    public void SubAttack()
+    {
+        player.StartCoroutine(SubAttackRoutine());
+    }
+    
+    IEnumerator SubAttackRoutine()
+    {
+        player.Anim.CrossFade("ShieldAttack", 0.1f); 
         
-        player.State.ChangeState(Define.StateName.Idle); // Idle로 전환
+        yield return new WaitForSeconds(0.1f);// 딜레이
+        
+        float animDuration = player.Anim.GetCurrentAnimatorClipInfo(0).Length;
+        yield return new WaitForSeconds(animDuration - 0.1f); // 애니메이션 시간만큼 대기
     }
 }

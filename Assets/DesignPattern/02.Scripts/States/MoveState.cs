@@ -8,7 +8,7 @@ public class MoveState : IState
     
     public void EnterState()
     {
-        player.Anim.CrossFade("MOVE", 0.1f);
+        player.Anim.CrossFade("Move", 0.1f);
     }
 
     public void UpdateState()
