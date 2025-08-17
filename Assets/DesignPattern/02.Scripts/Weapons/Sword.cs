@@ -7,6 +7,8 @@ public class Sword: Weapon, ISubAttackable
 {
     Player player = Player.Instance;
 
+    private float coolTime = 1.2f;
+    private float subCoolTime = 0.5f;
     protected override void Init()
     {
         base.Init();
@@ -21,6 +23,7 @@ public class Sword: Weapon, ISubAttackable
     IEnumerator AttackRoutine()
     {
         player.Anim.CrossFade("SwordAttack", 0.1f); 
+        UIManager.Instance.StartCoolTime(coolTime);
         
         yield return new WaitForSeconds(0.1f);// 딜레이
         
@@ -36,6 +39,7 @@ public class Sword: Weapon, ISubAttackable
     IEnumerator SubAttackRoutine()
     {
         player.Anim.CrossFade("ShieldAttack", 0.1f); 
+        UIManager.Instance.StartCoolTime(subCoolTime, true);
         
         yield return new WaitForSeconds(0.1f);// 딜레이
         

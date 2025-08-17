@@ -26,6 +26,8 @@ public abstract class Weapon : MonoBehaviour
         GameObject obj = Object.Instantiate(prefab, gripPoint);
         obj.SetActive(false);
         objects.Add(obj);
+        
+        UIManager.Instance.AddSubAttackIcon(Define.WeaponName.Sword, "Shield");
     }
 
     public void ActiveWeapons(bool isActive = true)

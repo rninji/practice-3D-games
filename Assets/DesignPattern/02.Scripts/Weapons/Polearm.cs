@@ -9,10 +9,13 @@ public class Polearm: Weapon
     {
         player.StartCoroutine(AttackRoutine());
     }
+    private float coolTime = 1.2f;
     
     IEnumerator AttackRoutine()
     {
         player.Anim.CrossFade("PolearmAttack", 0.1f); 
+        
+        UIManager.Instance.StartCoolTime(coolTime);
         
         yield return new WaitForSeconds(0.1f);// 딜레이
         
